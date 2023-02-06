@@ -1,12 +1,13 @@
 import { useState ,useEffect} from "react";
 import Pet from "./Pet";
+import useBreedList from "./useBreedList";
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
-const breeds = [];
 function SearchParams () {
     const [location, setLocation] = useState("");
     const [animal, setAnimal] = useState("");
     const [pets, setPets] = useState([]);
     const [breed, setBreed] = useState("");
+    const breeds = useBreedList(animal)
 
     useEffect(() => {
         requestPets();
@@ -32,20 +33,8 @@ function SearchParams () {
                   value={ location }
                   placeholder=" location"
               />
-              <label htmlFor="breed">breed</label>
-              <select
-                name="breed"
-                  id="breed"
-                  disabled={breeds.length === 0}
-                  value={ breed }
-                  onChange={ (e) => { setBreed(e.target.value); } }
-              >
-                  <option />
-                  {breeds.map((breed) => (
-                      <option key={breed}> {breed} </option>
-                  ))}
-              </select>
-              <label htmlFor="animal">Animal</label>
+             
+              <label htmlFor="animal">Animal
               <select
                 name="animal"
                   id="animal"
@@ -56,7 +45,25 @@ function SearchParams () {
                   {ANIMALS.map((animal) => (
                       <option key={animal}> {animal} </option>
                   ))}
-              </select>
+                  </select>
+                  </label>
+               <label htmlFor="breed">
+          Breed
+          <select
+            disabled={!breeds.length}
+            id="breed"
+            value={breed}
+            onChange={(e) => setBreed(e.target.value)}
+            onBlur={(e) => setBreed(e.target.value)}
+          >
+            <option />
+            {breeds.map((breed) => (
+              <option key={breed}>
+                {breed}
+              </option>
+            ))}
+          </select>
+        </label>
           <button>Submit</button>
           </form>
           { pets.map(pet => (
